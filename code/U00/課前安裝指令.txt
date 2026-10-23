@@ -1,0 +1,9 @@
+﻿winget install OpenJS.NodeJS.LTS
+winget install Git.Git
+npm install -g @anthropic-ai/claude-code
+npm install -g @openai/codex
+
+# 裝好後確認版本
+claude --version
+codex --version
+node -v

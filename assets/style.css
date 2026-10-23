@@ -1,0 +1,121 @@
+/* 課程首頁樣式 — 仿雜誌書封風格，淺色底＋橘紅強調 */
+:root{
+  --ink:#231f1c; --soft:#6b625a; --line:#e6e0d6;
+  --accent:#e2551f; --accent-2:#b8391a; --accent-soft:#fdf0e9;
+  --paper:#fffdf9; --bg:#f4f1ea;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.8;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+/* 跑馬燈 */
+.ticker{background:var(--ink);color:#f6efe7;overflow:hidden;font-size:13.5px;padding:9px 0}
+.ticker-track{display:flex;width:max-content;animation:roll 34s linear infinite}
+.ticker-group{display:flex;align-items:center;gap:16px;padding-right:16px;white-space:nowrap}
+.ticker a{opacity:.9}
+.ticker a:hover{opacity:1;color:#ffb08a}
+.ticker .sep{opacity:.4}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center;
+      padding:56px 0 44px}
+.badge{display:inline-block;background:var(--accent-soft);color:var(--accent-2);
+       font-size:12px;font-weight:700;letter-spacing:.14em;padding:5px 13px;border-radius:999px}
+.hero h1{font-family:"Noto Serif TC",serif;font-size:47px;line-height:1.28;
+         margin:16px 0 14px;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--accent);display:block}
+.lead{color:var(--soft);font-size:16.5px;margin:0 0 26px}
+.cta{display:inline-block;background:var(--accent);color:#fff;font-weight:700;
+     padding:14px 30px;border-radius:12px;transition:.18s}
+.cta:hover{background:var(--accent-2);transform:translateY(-2px);
+           box-shadow:0 10px 24px rgba(226,85,31,.28)}
+.hero-art{aspect-ratio:16/10;border-radius:18px;border:1px solid var(--line);
+          background:linear-gradient(135deg,#fff 0%,var(--accent-soft) 55%,#ffe4d3 100%);
+          display:grid;place-items:center;overflow:hidden;position:relative}
+.hero-art .glyph{font-size:96px;opacity:.85}
+.hero-art .stack{position:absolute;display:flex;gap:11px;bottom:22px}
+.hero-art .stack i{width:52px;height:68px;border-radius:5px;background:#fff;
+                   border:1px solid var(--line);box-shadow:0 5px 14px rgba(0,0,0,.09);
+                   display:grid;place-items:center;font-style:normal;font-weight:800;
+                   color:var(--accent);font-size:15px}
+
+/* 區塊 */
+.sec{padding:46px 0 10px}
+.sec h2{font-family:"Noto Serif TC",serif;font-size:28px;margin:0 0 6px}
+.sub{color:var(--soft);margin:0 0 26px;font-size:15.5px}
+
+/* 卡片牆 */
+.mag{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
+.tvol{display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);
+      border-radius:16px;overflow:hidden;transition:.2s}
+.tvol:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(35,31,28,.13);
+            border-color:#d9cfc0}
+.pic{aspect-ratio:4/3;display:grid;place-items:center;position:relative;
+     background:linear-gradient(140deg,#2b2622,#4a3f36)}
+.pic .big{font-size:74px}
+.pic .tagno{position:absolute;top:13px;left:14px;background:rgba(255,255,255,.93);
+            color:var(--accent-2);font-size:11.5px;font-weight:800;letter-spacing:.1em;
+            padding:4px 11px;border-radius:999px}
+.tvol .body{padding:19px 21px 21px;display:flex;flex-direction:column;flex:1}
+.no{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.14em;margin-bottom:6px}
+.tvol h3{font-size:19.5px;margin:0 0 9px;line-height:1.45}
+.tvol p{color:var(--soft);font-size:14.5px;margin:0 0 15px;flex:1}
+.go{color:var(--accent);font-weight:700;font-size:14.5px}
+.tvol:hover .go{color:var(--accent-2)}
+.meta{margin-top:13px;padding-top:12px;border-top:1px dashed var(--line);
+      color:var(--soft);font-size:13px}
+
+/* 一覽表 */
+.toc{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.toc a,.toc .row{display:flex;align-items:center;gap:17px;padding:16px 22px;
+                 border-bottom:1px solid var(--line);transition:.15s}
+.toc a:last-child,.toc .row:last-child{border-bottom:0}
+.toc a:hover{background:var(--accent-soft);padding-left:27px}
+.toc .ch{font-weight:800;color:var(--accent);min-width:38px;font-size:15px}
+.toc .nm{font-weight:700;font-size:16px}
+.toc .ds{color:var(--soft);font-size:13.5px}
+.toc .ar{margin-left:auto;color:var(--accent);font-weight:700}
+.toc .row.soon{opacity:.55}
+.toc .row.soon .ar{color:var(--soft);font-size:13px;font-weight:500}
+
+/* 提示條 */
+.tipbar{display:flex;gap:13px;align-items:flex-start;background:#fff8ef;
+        border:1px solid #f2d7bd;border-radius:13px;padding:15px 19px;margin:26px 0 0;
+        font-size:14.5px;color:#6d4a2f}
+.tipbar b{color:var(--accent-2)}
+
+/* 頁尾 */
+footer{margin-top:64px;background:var(--ink);color:#e8e0d7;padding:40px 0 30px}
+footer .wrap{text-align:center}
+.au-label{color:#c9bdb0;font-size:12.5px;letter-spacing:.2em;margin-bottom:14px}
+.au-name{font-family:"Noto Serif TC",serif;font-size:23px;margin:0 0 8px;color:#fff}
+.au-desc{color:#bdb2a6;font-size:14.5px;margin:0 auto 22px;max-width:560px}
+.license{border-top:1px solid #3b3530;padding-top:22px;margin-top:26px}
+.lic-t{font-weight:700;margin:0 0 6px;color:#fff}
+.fs{color:#bdb2a6;font-size:13.5px;margin:0 0 4px}
+.warn{color:#e8946b;font-size:13px;margin:6px 0 0}
+
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;gap:26px;padding:34px 0 28px}
+  .hero h1{font-size:33px}
+  .hero-art{aspect-ratio:16/9}
+  .toc a,.toc .row{flex-wrap:wrap;gap:9px}
+}
+
+/* Netlify 免費方案會注入一個 z-index 極高的徽章 iframe，
+   位置正好壓在右下角工具列上，把「程式碼」按鈕擋住。
+   這裡直接隱藏它，避免影響操作。 */
+#nl-badge-frame,
+iframe[title="Powered by Netlify"],
+[id^="netlify-badge"]{
+  display:none !important;
+  pointer-events:none !important;
+}

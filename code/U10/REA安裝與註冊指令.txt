@@ -1,0 +1,26 @@
+REA 安裝與註冊指令（U10｜本課實機：Windows PowerShell、Node.js v24.19.0、REA 6.7.0、Claude Code 2.1.309）
+
+【1】在空資料夾開 PowerShell，確認 Node.js 與 REA 能跑
+node --version
+npx -y rea-agents@6.7.0 --version
+
+【2】把 REA 接進 Claude Code（只在這個資料夾有效）
+注意：PowerShell 裡中間的 -- 一定要加單引號寫成 '--'，否則會出現 error: unknown option '-y'
+claude mcp add --scope local rea '--' cmd /d /c npx -y rea-agents@6.7.0 mcp
+claude mcp list
+→ 最後一行看到「rea: ... ✔ Connected」就成功
+
+【3】把提示詞交給 Claude Code（二選一）
+(a) 打 claude 進入對話，貼上「提示詞_REA拆解Excalidraw手繪線條.txt」整段
+(b) 一行送出（一定要加 -Encoding UTF8，不然中文會變亂碼）：
+Get-Content .\提示詞_REA拆解Excalidraw手繪線條.txt -Raw -Encoding UTF8 | claude -p --dangerously-skip-permissions
+   --dangerously-skip-permissions 會讓 AI 不經詢問就執行指令，只在「專門練習用的空資料夾」使用
+
+【4】用完移除（在同一個資料夾）
+claude mcp remove --scope local rea
+
+【官方來源】只從這三個地方取得 REA：
+https://github.com/morluto/rea　https://rea.tools　npm 套件 rea-agents
+（REA 官方提醒：名稱相似的倉庫或複製的 README 不代表是官方版本）
+
+【界線】只拆開源、自己做的、或有授權分析的軟體；只學原理、不搬程式、不破解付費軟體、不繞過登入。

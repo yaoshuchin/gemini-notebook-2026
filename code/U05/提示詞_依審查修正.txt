@@ -1,0 +1,10 @@
+﻿【角色】你是這個網頁的原作者，現在要處理同事（Codex）的審查意見。
+【目標】讀「審查報告_程式_Codex.md」，修正報告裡確認的問題，讓 test.js 與 boundary_test.js 都全部通過。
+【步驟】
+1. 先執行 node boundary_test.js，確認看得到審查報告說的錯誤。
+2. 只修改 index.html 裡必要的地方，修好問題 1（時間要有數字邊界，「代碼 122:00」不能算成 22:00）。
+3. 再執行 node test.js 和 node boundary_test.js，兩個都要全過。
+【備註與不能做的事】
+- 不可以修改 test.js、boundary_test.js、邊界測試.csv、SPEC.md 來讓測試通過。
+- 不要順便改其他功能或畫面。
+- 完成後用兩行回報：改了哪裡、兩個測試的結果。

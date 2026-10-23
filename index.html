@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=fb1aa415-238d-4982-b223-5c0e333e2b73
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GeminiNoteBook 從資料建立規格到生成工具 · NotebookLM × AI 規格化 × Vibe Coding</title>
+<meta name="description" content="阿亮老師 15W383 課程教材：Gemini Notebook（原 NotebookLM）建知識庫、AI 規格化與交叉審查、Claude Code 做出報帳檢查小幫手。">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+.wrap{max-width:none;width:min(96vw,1800px);padding:0 2vw}
+body{font-size:18px}
+.hero h1{font-size:clamp(40px,4.4vw,72px)} .hero .lead{font-size:clamp(19px,1.35vw,24px);max-width:none}
+.hero{grid-template-columns:1.1fr 1fr;gap:4vw;align-items:center}
+.hero-shot{width:100%;border-radius:18px;box-shadow:0 24px 60px rgba(31,36,48,.25);border:6px solid #fff}
+.sec h2{font-size:clamp(30px,2.4vw,42px)} .sec .sub{font-size:19px}
+.stage3d{position:relative;height:clamp(300px,31vw,500px);perspective:1500px;overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.stage3d.drag{cursor:grabbing}
+.stage3d .ring{position:absolute;inset:0;transform-style:preserve-3d}
+.stage3d .face{position:absolute;left:50%;top:46%;display:block;border-radius:16px;overflow:hidden;background:#fff;border:5px solid #fff;
+  box-shadow:0 22px 50px rgba(31,36,48,.28);text-decoration:none;color:#fff;transition:opacity .25s,filter .25s;-webkit-user-drag:none}
+.stage3d .face img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:left top;pointer-events:none}
+.stage3d .face span{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;font-weight:800;font-size:17px;
+  background:linear-gradient(transparent,rgba(20,26,50,.85))}
+.stage3d .hint{position:absolute;left:0;right:0;bottom:6px;text-align:center;color:#6b7280;font-size:15px}
+.stage3d .nav{position:absolute;top:44%;width:42px;height:42px;border-radius:50%;border:0;background:#22306ecc;color:#fff;font-size:20px;cursor:pointer;z-index:2}
+.stage3d .nav.l{left:6px} .stage3d .nav.r{right:6px}
+.plays{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:26px;margin-top:22px}
+.play{background:linear-gradient(160deg,#22306e,#3a2a6e);color:#fff;border-radius:20px;overflow:hidden;box-shadow:0 16px 36px rgba(34,48,110,.28);display:flex;flex-direction:column;transition:transform .25s}
+.play:hover{transform:translateY(-6px) rotate(-.4deg)}
+.play img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:left top;display:block}
+.play .pb{padding:18px 22px 22px;display:flex;flex-direction:column;flex:1}
+.play h3{font-size:25px;margin:0 0 8px} .play p{font-size:17px;line-height:1.7;color:#dfe3f3;flex:1;margin:0}
+.play .go{align-self:flex-start;margin-top:14px;background:#e8531f;color:#fff;padding:11px 22px;border-radius:12px;font-weight:800;text-decoration:none;font-size:17px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.tools span{font-weight:800;font-size:15.5px;padding:6px 13px;border-radius:999px;border:1.5px solid;background:#fff}
+.tools .t1{color:#1a5fd0;border-color:#b9d0f5}.tools .t2{color:#7b3fd6;border-color:#d8c6f4}.tools .t3{color:#c2410c;border-color:#f6cdb9}
+.tools .t4{color:#1f2430;border-color:#cfd4dc}.tools .t5{color:#2f7d32;border-color:#c3e3c4}.tools .t6{color:#b4361f;border-color:#f1c4ba}
+.ctas{display:flex;flex-wrap:nowrap;gap:10px;align-items:center}
+.ctas .cta{padding:12px clamp(10px,1vw,18px);font-size:clamp(13px,.95vw,16px);white-space:nowrap}
+.cta.vb{background:#1f4a5a;color:#fff}
+.cta.vb:hover{background:#2c6a80;color:#fff}
+@media(max-width:860px){.ctas{flex-wrap:wrap}}
+.cta.nb{background:#fff;color:#22306e;border:2px solid #22306e}
+.cta.nb:hover{background:#22306e;color:#fff}
+.cta.ai{background:#1f2430;color:#fff}
+.cta.ai:hover{background:#3a2a6e;color:#fff}
+.books{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:26px;margin-top:22px}
+.book{background:#fff;border:1px solid #e6e0d6;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 14px 32px rgba(31,36,48,.12);transition:transform .22s,box-shadow .22s;position:relative;color:inherit}
+.book:hover{transform:translateY(-6px);box-shadow:0 22px 44px rgba(31,36,48,.2)}
+.book .cv{background:linear-gradient(160deg,#f4f1ea,#fdf0e9);padding:22px 22px 8px;display:grid;place-items:center}
+.book .cv img{width:72%;aspect-ratio:600/840;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(0,0,0,.22))}
+.book .new{position:absolute;top:14px;right:14px;background:#e2551f;color:#fff;font-weight:800;font-size:14px;padding:3px 12px;border-radius:999px}
+.book .bb{padding:14px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.book h3{margin:0;font-size:20px;line-height:1.45}
+.book .st{margin:0;font-size:15px;color:#6b625a;line-height:1.6}
+.book .tie{margin:4px 0 0;font-size:14.5px;color:#22306e;background:#eef1fb;border-radius:8px;padding:5px 10px}
+.book .pr{margin-top:auto;padding-top:8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.book .pr s{color:#9a918a;font-size:15px}.book .pr b{color:#b8391a;font-size:22px}
+.book .buy{display:block;text-align:center;background:#1f2430;color:#fff;font-weight:800;border-radius:10px;padding:10px;margin-top:10px}
+.book:hover .buy{background:#e2551f}
+.bookhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.bookhead .all{font-weight:800;color:#22306e;border:2px solid #22306e;border-radius:12px;padding:9px 18px}
+.bookhead .all:hover{background:#22306e;color:#fff}
+.note-s{font-size:14.5px;color:#6b625a;margin-top:14px}
+
+.feats{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.feats span{background:#fdeee7;color:#b93a10;border:1px solid #f6cdb9;padding:7px 15px;border-radius:999px;font-weight:700;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:28px;margin-top:22px}
+.card{background:#fff;border:1px solid #ece6dd;border-radius:18px;box-shadow:0 10px 28px rgba(31,36,48,.07);display:flex;flex-direction:column}
+.card .pic{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;border-radius:18px 18px 0 0;background:#f3f4f7}
+.card .pic img{width:100%;height:100%;object-fit:cover;object-position:left top;transition:transform .4s}
+.card:hover .pic img{transform:scale(1.04)}
+.card .ai{position:absolute;right:12px;bottom:12px;background:#1f2430cc;color:#fff;font-size:13px;padding:3px 10px;border-radius:6px}
+.acts .go.vid{background:#06c755}
+@media(min-width:1100px){.card.wide{grid-column:1/-1;flex-direction:row}
+ .card.wide .pic{flex:0 0 52%;aspect-ratio:16/9;border-radius:18px 0 0 18px}
+ .card.wide .pic img{object-position:center}
+ .card.wide .body{padding:34px 44px;justify-content:center}
+ .card.wide h3{font-size:36px} .card.wide p{flex:0 1 auto;font-size:19px}}
+.card .tag{position:absolute;left:14px;top:14px;background:#e8531f;color:#fff;font-weight:800;padding:4px 14px;border-radius:8px;font-size:18px}
+.card .night{position:absolute;right:14px;top:14px;background:#22306ecc;color:#fff;padding:4px 12px;border-radius:8px;font-size:15px}
+.card .body{padding:20px 24px 24px;display:flex;flex-direction:column;flex:1}
+.card .kind{color:#b93a10;font-weight:700;font-size:16px;letter-spacing:1px}
+.card h3{font-size:26px;margin:6px 0 10px} .card p{font-size:17.5px;line-height:1.75;color:#3c4454;flex:1}
+.acts{display:flex;gap:12px;margin-top:16px;align-items:flex-start;flex-wrap:wrap}
+.acts .go{background:#e8531f;color:#fff;padding:11px 20px;border-radius:12px;font-weight:800;text-decoration:none;font-size:17px}
+.dl{position:relative} .dl summary{list-style:none;cursor:pointer;border:2px solid #22306e;color:#22306e;padding:9px 18px;border-radius:12px;font-weight:800;font-size:17px}
+.dl summary::-webkit-details-marker{display:none}
+.dl .menu{position:absolute;z-index:5;top:52px;left:0;min-width:340px;max-width:86vw;background:#fff;border:1px solid #dde2ea;border-radius:12px;box-shadow:0 14px 34px rgba(31,36,48,.18);padding:8px}
+.dl .menu a{display:block;padding:10px 12px;border-radius:8px;color:#1f2430;text-decoration:none;font-size:16px;word-break:break-all}
+.dl .menu a:hover{background:#fdeee7} .dl .menu small{color:#8a929e;margin-left:6px}
+.toc .row{text-decoration:none;color:inherit} .toc .ds{display:block;font-size:16px} .toc .nm{font-size:20px}
+.qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:18px;margin-top:18px}
+.qa div{background:#faf7f2;border:1px solid #eee4d5;border-radius:14px;padding:18px 22px;font-size:17.5px;line-height:1.75}
+.qa b.q{display:block;color:#b93a10;font-size:18.5px;margin-bottom:6px}
+code{background:#eef1f6;padding:2px 8px;border-radius:6px;word-break:break-all}
+.vrow{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(300px,1fr);gap:26px;margin:18px 0 6px;align-items:start}
+.vbox{margin:0;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(31,36,48,.25);background:#000}
+.vbox video{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.chap{background:#fff;border:1px solid #ece6dd;border-radius:18px;padding:16px 14px;box-shadow:0 10px 28px rgba(31,36,48,.07)}
+.chap h3{font-size:19px;margin:2px 8px 10px}
+.chap button{display:flex;gap:12px;width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:5px 10px;font:inherit;font-size:16px;color:#1f2430;cursor:pointer}
+.chap button:hover,.chap button.on{background:#e9f9ef}
+.chap button b{color:#06a847;font-variant-numeric:tabular-nums;min-width:44px}
+@media(max-width:1100px){.vrow{grid-template-columns:1fr}}
+@media(max-width:860px){.stage3d{height:300px} .plays{grid-template-columns:1fr} .hero{grid-template-columns:1fr} .grid{grid-template-columns:1fr} .qa{grid-template-columns:1fr} .dl .menu{min-width:260px}}
+</style>
+<!--STU--><style>.hero{grid-template-columns:1fr!important}</style><!--/STU-->
+</head>
+<body>
+<div class="ticker"><div class="ticker-track"><div class="ticker-group"><a href="#units">規章丟進 Gemini Notebook，問出有出處的答案</a><span class="sep">·</span><a href="#units">一鍵產出簡報、測驗、資料表、稽核報告</a><span class="sep">·</span><a href="#units">AI 寫規格書、另一個 AI 挑錯、人來裁決</a><span class="sep">·</span><a href="#units">Claude Code 照規格做出報帳檢查小幫手</a><span class="sep">·</span><a href="#units">AI 也會錯：四個實機案例教你設計審查機制</a><span class="sep">·</span><a href="#units">把規章變成偵探遊戲、闖關 RPG、對話陪練</a><span class="sep">·</span><a href="#units">五個零件＋一份萬用提示詞：做出你的 AI 創作生成器</a><span class="sep">·</span><a href="#units">看到喜歡的功能？用 REA 拆給你看，再做自己的版本</a><span class="sep">·</span><a href="#books">📚 阿亮老師新書《Claude Code 全攻略》《ChatGPT × Codex 全攻略》天瓏書局熱賣中</a><span class="sep">·</span></div><div class="ticker-group" aria-hidden="true"><a href="#units">規章丟進 Gemini Notebook，問出有出處的答案</a><span class="sep">·</span><a href="#units">一鍵產出簡報、測驗、資料表、稽核報告</a><span class="sep">·</span><a href="#units">AI 寫規格書、另一個 AI 挑錯、人來裁決</a><span class="sep">·</span><a href="#units">Claude Code 照規格做出報帳檢查小幫手</a><span class="sep">·</span><a href="#units">AI 也會錯：四個實機案例教你設計審查機制</a><span class="sep">·</span><a href="#units">把規章變成偵探遊戲、闖關 RPG、對話陪練</a><span class="sep">·</span><a href="#units">五個零件＋一份萬用提示詞：做出你的 AI 創作生成器</a><span class="sep">·</span><a href="#units">看到喜歡的功能？用 REA 拆給你看，再做自己的版本</a><span class="sep">·</span><a href="#books">📚 阿亮老師新書《Claude Code 全攻略》《ChatGPT × Codex 全攻略》天瓏書局熱賣中</a><span class="sep">·</span></div></div></div>
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <span class="badge">15W383 · 線上實作課程</span>
+      <div class="tools"><span class="t1">📒 Gemini Notebook</span><span class="t2">✨ Gemini</span><span class="t3">🧡 Claude Code</span><span class="t4">🧪 Codex CLI</span><span class="t5">🟢 Node.js</span><span class="t6">🌿 Git</span></div>
+      <h1>從資料到工具<br><em>三段式開發實戰</em></h1>
+      <p class="lead">NotebookLM（現名 Gemini Notebook）× AI 規格化 × Vibe Coding。把公司規章交給 AI 讀、讓 AI 寫成規格書、再用 Claude Code 做出每天會用的小工具——每一段都由另一個 AI 交叉審查，最後由人決定。</p>
+      <div class="ctas"><a class='cta' href='reader.html?u=U00'>從開課導讀開始 →</a>
+        <a class="cta nb" href="https://notebook.google.com/" target="_blank" rel="noopener">📒 進入 Gemini Notebook ↗</a>
+        <a class='cta ai' href='aishort.html'>⚡ AI 提示詞捷徑庫 →</a>
+        <a class="cta vb" href="https://vibe.freakz2z.com/" target="_blank" rel="noopener">🧰 Vibe 工具集 ↗</a></div>
+    </div>
+    
+  </section>
+  <section class="sec">
+    <h2>課前須知</h2>
+    <div class="qa">
+      <div><b class="q">課程用哪個版本的 Claude、Codex？</b>以 CLI（指令列）版本為優先。教材實機版本：Claude Code 2.1.296、Codex CLI 0.159.0。</div>
+      <div><b class="q">沒有程式背景可以上嗎？要懂 JavaScript、Python 嗎？</b>可以，但需要有規劃與撰寫文字的基礎能力。不需要懂 JavaScript 或 Python，只要知道技術可以做到哪些事。</div>
+      <div><b class="q">會教怎麼驗證輸出、檢查邏輯嗎？</b>會。AI 也會錯，要人工看過所有頁面、去贅字錯字，重點是檢查邏輯有沒有畫蛇添足；用不同 AI 交叉驗證，設計成審查機制（U04～U06）。</div>
+      <div><b class="q">想買筆電，怎麼選？</b>老師建議 RTX 4090 以上的獨立顯示卡為佳。課程工具都在雲端運算，上課當下一般筆電即可操作。</div>
+    </div>
+  </section>
+  <section class="sec" id="units">
+    <h2>一份資料，變出一整套工作成果</h2>
+    <p class="sub">把公司規章丟進 Gemini Notebook，從問答、簡報、報告文案一路做到能用的網頁小工具；每一步都有實機畫面跟著做，還附學校版對照，老師也能直接套用到教學。</p>
+    <div class="feats">
+      <span>💬 有出處的問答</span><span>📊 簡報（可下載 PPTX）</span><span>📝 報告文案</span><span>🧠 心智圖</span>
+      <span>🖼️ 資訊圖表</span><span>📋 資料表</span><span>✅ 測驗題</span><span>📐 AI 寫規格書</span>
+      <span>🔍 AI 交叉審查</span><span>🛠️ Vibe Coding 做網頁工具</span>
+      <span>🕵️ 偵探辦案遊戲</span><span>🗺️ 闖關 RPG</span><span>💬 角色扮演陪練</span>
+    </div>
+    <div class="grid"><article class="card">
+  <a class='pic' href='reader.html?u=UAI'><img src="assets/cards/UAI.jpg" alt="AI 名詞大集合 實機截圖"><span class="tag">UAI</span></a>
+  <div class="body"><div class="kind">知識地圖・開課前先看</div><h3>AI 名詞大集合</h3><p>Vibe Coding、Spec-Driven Development、Prompt／Context、Agent、Loop、MCP、Skill、幻覺與交叉審查：16 個熱門名詞一句白話，並指出本課哪一步在做它。</p>
+    <div class="acts"><a class='go' href='reader.html?u=UAI'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/UAI/AI名詞速查表.md" download>⬇ AI名詞速查表.md <small>2 KB</small></a><a href="code/UAI/提示詞_請AI解釋名詞.txt" download>⬇ 提示詞_請AI解釋名詞.txt <small>1 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U00'><img src="assets/cards/U00.jpg" alt="三段式地圖與學員問答 實機截圖"><span class="tag">U00</span></a>
+  <div class="body"><div class="kind">開課導讀</div><h3>三段式地圖與學員問答</h3><p>這門課做出什麼、NotebookLM 改名 Gemini Notebook、老師回覆四個常見問題、課前安裝。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U00'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U00/練習素材_教育版.zip" download>⬇ 練習素材_教育版.zip <small>182 KB</small></a><a href="code/U00/練習素材_晨曦科技.zip" download>⬇ 練習素材_晨曦科技.zip <small>386 KB</small></a><a href="code/U00/課前安裝指令.txt" download>⬇ 課前安裝指令.txt <small>1 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U01'><img src="assets/cards/U01.jpg" alt="建立規章知識庫 實機截圖"><span class="tag">U01</span></a>
+  <div class="body"><div class="kind">第一段・資料</div><h3>建立規章知識庫</h3><p>上傳 3 份規章 PDF 與報帳 CSV、加網站、用 Fast Research 上網找勞基法，檢查匯入失敗的來源。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U01'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U01/網址與搜尋關鍵字.txt" download>⬇ 網址與搜尋關鍵字.txt <small>1 KB</small></a><a href="code/U01/練習素材_晨曦科技.zip" download>⬇ 練習素材_晨曦科技.zip <small>386 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U02'><img src="assets/cards/U02.jpg" alt="問出有出處的答案 實機截圖"><span class="tag">U02</span></a>
+  <div class="body"><div class="kind">第一段・資料</div><h3>問出有出處的答案</h3><p>一個問題逐筆檢查 10 筆報帳，抓出 6 筆不合規（和人工答案 6/6 一致）；點引用對原文、存記事、在 Gemini App 使用。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U02'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U02/提示詞_U02.txt" download>⬇ 提示詞_U02.txt <small>1 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U03'><img src="assets/cards/U03.jpg" alt="工作室一鍵產出 實機截圖"><span class="tag">U03</span></a>
+  <div class="body"><div class="kind">第一段・資料</div><h3>工作室一鍵產出</h3><p>心智圖、資料表、資訊圖表、新人訓練簡報（下載 PPTX）、測驗、稽核報告，一次送出六種成品。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U03'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U03/成品_晨曦科技新人生存指南.pdf" download>⬇ 成品_晨曦科技新人生存指南.pdf <small>6810 KB</small></a><a href="code/U03/提示詞_U03_工作室.txt" download>⬇ 提示詞_U03_工作室.txt <small>1 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U04'><img src="assets/cards/U04.jpg" alt="AI 規格化與交叉審查 實機截圖"><span class="tag">U04</span></a>
+  <div class="body"><div class="kind">第二段・規格化</div><h3>AI 規格化與交叉審查</h3><p>Gemini Notebook 寫規格書，Codex CLI 挑出 15 個問題，人工裁決後定稿成 SPEC.md v2。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U04'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U04/U04_規格化全套.zip" download>⬇ U04_規格化全套.zip <small>16 KB</small></a><a href="code/U04/提示詞_交叉審查規格.txt" download>⬇ 提示詞_交叉審查規格.txt <small>1 KB</small></a><a href="code/U04/提示詞_規格書.txt" download>⬇ 提示詞_規格書.txt <small>1 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U05'><img src="assets/cards/U05.jpg" alt="照規格做出報帳檢查小幫手 實機截圖"><span class="tag">U05</span></a>
+  <div class="body"><div class="kind">第三段・Vibe Coding</div><h3>照規格做出報帳檢查小幫手</h3><p>Claude Code 做網頁並自測 10/10；Codex 設計 16 筆邊界測試抓到 1 個錯，修 1 行後 16/16。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U05'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U05/報帳檢查小幫手_完成品.zip" download>⬇ 報帳檢查小幫手_完成品.zip <small>23 KB</small></a><a href="code/U05/提示詞_交叉審查程式.txt" download>⬇ 提示詞_交叉審查程式.txt <small>1 KB</small></a><a href="code/U05/提示詞_依審查修正.txt" download>⬇ 提示詞_依審查修正.txt <small>1 KB</small></a><a href="code/U05/提示詞_做網頁.txt" download>⬇ 提示詞_做網頁.txt <small>1 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U06'><img src="assets/cards/U06.jpg" alt="審查機制：AI 會錯在哪裡 實機截圖"><span class="tag">U06</span></a>
+  <div class="body"><div class="kind">貫穿全程・審查</div><h3>審查機制：AI 會錯在哪裡</h3><p>實機遇到的四個錯：PDF 表格讀錯、記事被當規定、自行加料、程式邊界錯誤。每個都示範怎麼抓、怎麼修。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U06'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U06/審查清單.md" download>⬇ 審查清單.md <small>1 KB</small></a></div></details></div></div>
+</article><article class="card">
+  <a class='pic' href='reader.html?u=U07'><img src="assets/cards/U07.jpg" alt="把規章變成遊戲與 AI 陪練 實機截圖"><span class="tag">U07</span></a>
+  <div class="body"><div class="kind">亮點實作・互動成品</div><h3>把規章變成遊戲與 AI 陪練</h3><p>同一份規章做成報帳偵探社、新人闖關 RPG、難搞同事對話練習；再用 Gemini Notebook 偵探模式與角色扮演即時對練，加上語音對話、短影片等新功能。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U07'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U07/報帳偵探社_完成品.zip" download>⬇ 報帳偵探社_完成品.zip <small>24 KB</small></a><a href="code/U07/提示詞_做遊戲_精簡.txt" download>⬇ 提示詞_做遊戲_精簡.txt <small>1 KB</small></a><a href="code/U07/提示詞_偵探模式_精簡.txt" download>⬇ 提示詞_偵探模式_精簡.txt <small>1 KB</small></a><a href="code/U07/提示詞_出題_精簡.txt" download>⬇ 提示詞_出題_精簡.txt <small>1 KB</small></a><a href="code/U07/提示詞_角色扮演_精簡.txt" download>⬇ 提示詞_角色扮演_精簡.txt <small>1 KB</small></a><a href="code/U07/新人闖關RPG_完成品.zip" download>⬇ 新人闖關RPG_完成品.zip <small>33 KB</small></a><a href="code/U07/難搞同事對話練習_完成品.zip" download>⬇ 難搞同事對話練習_完成品.zip <small>33 KB</small></a></div></details></div></div>
+</article><article class="card wide">
+  <a class='pic' href='reader.html?u=U09'><img src="assets/cards/U09.jpg" alt="AI 創作生成器 實機截圖"><span class="tag">U09</span></a>
+  <div class="body"><div class="kind">加碼實作・做自己的生成器</div><h3>AI 創作生成器</h3><p>房間、場景、轉蛋、對話框，生成器都是「範本＋選項＋隨機＋預覽＋匯出」。用一份萬用提示詞交給 Claude Code 或 Codex，實作「教室場景生成器」並上傳 Netlify；附四類提示詞範本。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U09'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U09/Netlify部署指令.txt" download>⬇ Netlify部署指令.txt <small>1 KB</small></a><a href="code/U09/U09_生成器素材包.zip" download>⬇ U09_生成器素材包.zip <small>2336 KB</small></a><a href="code/U09/提示詞_四類範本.txt" download>⬇ 提示詞_四類範本.txt <small>3 KB</small></a><a href="code/U09/提示詞_改版追加.txt" download>⬇ 提示詞_改版追加.txt <small>1 KB</small></a><a href="code/U09/提示詞_示範_教室場景生成器.txt" download>⬇ 提示詞_示範_教室場景生成器.txt <small>1 KB</small></a><a href="code/U09/提示詞_萬用骨架.txt" download>⬇ 提示詞_萬用骨架.txt <small>1 KB</small></a></div></details></div></div>
+</article><article class="card wide">
+  <a class='pic' href='reader.html?u=U10'><img src="assets/cards/U10.jpg" alt="REA 拆解與復刻 實機截圖"><span class="tag">U10</span></a>
+  <div class="body"><div class="kind">加碼實作・REA 拆解與復刻</div><h3>REA 拆解與復刻</h3><p>看到喜歡的功能，讓 AI 用 REA 拆給你看：實拆 Excalidraw 的手繪線條，找到關鍵程式與原理，再只學原理、用自己的寫法做出「手繪風教學圖卡產生器」；附合法界線與兩個 PowerShell 踩坑。</p>
+    <div class="acts"><a class='go' href='reader.html?u=U10'>📖 翻開這一本</a>
+      <details class="dl"><summary>⬇ 資源下載</summary><div class="menu"><a href="code/U10/REA安裝與註冊指令.txt" download>⬇ REA安裝與註冊指令.txt <small>1 KB</small></a><a href="code/U10/手繪風教學圖卡產生器_完成品.zip" download>⬇ 手繪風教學圖卡產生器_完成品.zip <small>12 KB</small></a><a href="code/U10/提示詞_REA拆解Excalidraw手繪線條.txt" download>⬇ 提示詞_REA拆解Excalidraw手繪線條.txt <small>1 KB</small></a></div></details></div></div>
+</article></div>
+    <div class="tipbar" id="howto"><span>💡</span><span><b>閱讀器怎麼用：</b>下排按鈕可翻頁、縮放、整頁顯示、放大鏡、跳章節；可直接在書頁上畫線、加箭頭、打字（不會儲存）。書中的提示詞與指令旁有「📋 複製」按鈕，下排「指令」面板可以一次複製整份。</span></div>
+  </section>
+  
+  <section class="sec" id="books">
+    <div class="bookhead"><div><h2>📚 阿亮老師的書｜天瓏書局熱賣中</h2>
+      <p class="sub">課堂上用到的 Claude Code、Codex、Gemini，書裡有更完整的實作；點封面直接到天瓏書局。</p></div>
+      <a class="all" href="https://www.tenlong.com.tw/search?keyword=%E6%9B%BE%E6%85%B6%E8%89%AF" target="_blank" rel="noopener">在天瓏看全部 ↗</a></div>
+    <div class="books"><a class="book" href="https://www.tenlong.com.tw/products/9786264146258" target="_blank" rel="noopener"><span class="new">新書</span>
+      <div class="cv"><img src="assets/books/9786264146258.jpg" alt="ChatGPT × Codex 全攻略 書封"></div>
+      <div class="bb"><h3>ChatGPT × Codex 全攻略</h3><p class="st">從零基礎到自動化，打造你的 AI Agent 工作流</p><p class="tie">🔗 本課 U04、U05 用 Codex CLI 做交叉審查</p>
+        <div class="pr"><s>定價 $1,000</s><b>天瓏 $780</b></div><span class="buy">到天瓏書局看這本 ↗</span></div></a><a class="book" href="https://www.tenlong.com.tw/products/9786264146395" target="_blank" rel="noopener"><span class="new">新書</span>
+      <div class="cv"><img src="assets/books/9786264146395.jpg" alt="Google Gemini Spark AI 代理人跨域落地師全攻略 書封"></div>
+      <div class="bb"><h3>Google Gemini Spark AI 代理人跨域落地師全攻略</h3><p class="st">你交辦，它做完——教師、主管、上班族、商家、接案者的 24 小時 AI 秘書</p><p class="tie">🔗 Gemini 生態系的 AI 代理人實戰</p>
+        <div class="pr"><s>定價 $690</s><b>天瓏 $538</b></div><span class="buy">到天瓏書局看這本 ↗</span></div></a><a class="book" href="https://www.tenlong.com.tw/products/9786264146241" target="_blank" rel="noopener"><span class="new">新書</span>
+      <div class="cv"><img src="assets/books/9786264146241.jpg" alt="Claude Code 全攻略 書封"></div>
+      <div class="bb"><h3>Claude Code 全攻略</h3><p class="st">從一句話到部署上線，打造你的 AI Agent 開發團隊</p><p class="tie">🔗 本課 U05 用 Claude Code 做出報帳檢查小幫手</p>
+        <div class="pr"><s>定價 $1,080</s><b>天瓏 $842</b></div><span class="buy">到天瓏書局看這本 ↗</span></div></a><a class="book" href="https://www.tenlong.com.tw/products/9786264145428" target="_blank" rel="noopener">
+      <div class="cv"><img src="assets/books/9786264145428.jpg" alt="10 倍速！AI Skill 全攻略 書封"></div>
+      <div class="bb"><h3>10 倍速！AI Skill 全攻略</h3><p class="st">建立 Skill 驅動 AI 系統，打造從學術研究到專案開發的自動化工作流</p><p class="tie">🔗 把常做的工作做成可重複用的 Skill</p>
+        <div class="pr"><s>定價 $1,000</s><b>天瓏 $780</b></div><span class="buy">到天瓏書局看這本 ↗</span></div></a><a class="book" href="https://www.tenlong.com.tw/products/9786264144803" target="_blank" rel="noopener">
+      <div class="cv"><img src="assets/books/9786264144803.jpg" alt="養成你的 AI 龍蝦管家！ 書封"></div>
+      <div class="bb"><h3>養成你的 AI 龍蝦管家！</h3><p class="st">OpenClaw × NemoClaw × Google Antigravity × Claude Code：打造能查行程、收郵件、遠端控制電腦的 AI 代理人</p><p class="tie">🔗 讓 AI 代理人幫你查行程、收郵件</p>
+        <div class="pr"><s>定價 $750</s><b>天瓏 $585</b></div><span class="buy">到天瓏書局看這本 ↗</span></div></a><a class="book" href="https://www.tenlong.com.tw/products/9786264144131" target="_blank" rel="noopener">
+      <div class="cv"><img src="assets/books/9786264144131.jpg" alt="不懂程式也能自架專屬 AI 書封"></div>
+      <div class="bb"><h3>不懂程式也能自架專屬 AI</h3><p class="st">Vibe Coding 教你從零開始本地部署與雲端整合</p><p class="tie">🔗 本課第三段 Vibe Coding 的延伸</p>
+        <div class="pr"><s>定價 $790</s><b>天瓏 $616</b></div><span class="buy">到天瓏書局看這本 ↗</span></div></a></div>
+    <p class="note-s">出版：博碩文化。價格為 2026/10/15 天瓏書局網頁標價（定價／折扣價），實際以書店頁面為準。</p>
+  </section>
+  <section class="sec">
+    <h2>一覽表</h2>
+    <nav class="toc"><a class='row' href='reader.html?u=UAI'><span class="ch">UAI</span><span><span class="nm">AI 名詞大集合</span><span class="ds">知識地圖・開課前先看｜Vibe Coding、Spec-Driven Development、Prompt／Context、Agent、Loop、MCP、Skill、幻覺與交叉審查：16 個熱門名詞一句白話，並指出本課哪一步在做它。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U00'><span class="ch">U00</span><span><span class="nm">三段式地圖與學員問答</span><span class="ds">開課導讀｜這門課做出什麼、NotebookLM 改名 Gemini Notebook、老師回覆四個常見問題、課前安裝。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U01'><span class="ch">U01</span><span><span class="nm">建立規章知識庫</span><span class="ds">第一段・資料｜上傳 3 份規章 PDF 與報帳 CSV、加網站、用 Fast Research 上網找勞基法，檢查匯入失敗的來源。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U02'><span class="ch">U02</span><span><span class="nm">問出有出處的答案</span><span class="ds">第一段・資料｜一個問題逐筆檢查 10 筆報帳，抓出 6 筆不合規（和人工答案 6/6 一致）；點引用對原文、存記事、在 Gemini App 使用。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U03'><span class="ch">U03</span><span><span class="nm">工作室一鍵產出</span><span class="ds">第一段・資料｜心智圖、資料表、資訊圖表、新人訓練簡報（下載 PPTX）、測驗、稽核報告，一次送出六種成品。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U04'><span class="ch">U04</span><span><span class="nm">AI 規格化與交叉審查</span><span class="ds">第二段・規格化｜Gemini Notebook 寫規格書，Codex CLI 挑出 15 個問題，人工裁決後定稿成 SPEC.md v2。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U05'><span class="ch">U05</span><span><span class="nm">照規格做出報帳檢查小幫手</span><span class="ds">第三段・Vibe Coding｜Claude Code 做網頁並自測 10/10；Codex 設計 16 筆邊界測試抓到 1 個錯，修 1 行後 16/16。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U06'><span class="ch">U06</span><span><span class="nm">審查機制：AI 會錯在哪裡</span><span class="ds">貫穿全程・審查｜實機遇到的四個錯：PDF 表格讀錯、記事被當規定、自行加料、程式邊界錯誤。每個都示範怎麼抓、怎麼修。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U07'><span class="ch">U07</span><span><span class="nm">把規章變成遊戲與 AI 陪練</span><span class="ds">亮點實作・互動成品｜同一份規章做成報帳偵探社、新人闖關 RPG、難搞同事對話練習；再用 Gemini Notebook 偵探模式與角色扮演即時對練，加上語音對話、短影片等新功能。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U09'><span class="ch">U09</span><span><span class="nm">AI 創作生成器</span><span class="ds">加碼實作・做自己的生成器｜房間、場景、轉蛋、對話框，生成器都是「範本＋選項＋隨機＋預覽＋匯出」。用一份萬用提示詞交給 Claude Code 或 Codex，實作「教室場景生成器」並上傳 Netlify；附四類提示詞範本。</span></span><span class="ar">→</span></a><a class='row' href='reader.html?u=U10'><span class="ch">U10</span><span><span class="nm">REA 拆解與復刻</span><span class="ds">加碼實作・REA 拆解與復刻｜看到喜歡的功能，讓 AI 用 REA 拆給你看：實拆 Excalidraw 的手繪線條，找到關鍵程式與原理，再只學原理、用自己的寫法做出「手繪風教學圖卡產生器」；附合法界線與兩個 PowerShell 踩坑。</span></span><span class="ar">→</span></a></nav>
+  </section>
+  <section class="sec">
+    <h2>課前準備</h2>
+    <nav class="toc">
+      <div class="row"><span class="ch">1</span><span><span class="nm">Google 帳號</span><span class="ds">開 <code>notebook.google.com</code> 看得到「新增筆記本」即可</span></span></div>
+      <div class="row"><span class="ch">2</span><span><span class="nm">Node.js 與 Git</span><span class="ds"><code>winget install OpenJS.NodeJS.LTS</code>、<code>winget install Git.Git</code></span></span></div>
+      <div class="row"><span class="ch">3</span><span><span class="nm">Claude Code（需 Claude 付費方案）</span><span class="ds"><code>npm install -g @anthropic-ai/claude-code</code>，<b>務必課前裝好並登入</b></span></span></div>
+      <div class="row"><span class="ch">4</span><span><span class="nm">Codex CLI（需 ChatGPT 付費方案）</span><span class="ds"><code>npm install -g @openai/codex</code>，裝好後打 <code>codex --version</code> 確認</span></span></div>
+    </nav>
+  </section>
+</div>
+<footer><div class="wrap">
+  <div class="au-label">關於作者</div>
+  <p class="au-name">阿亮老師 · 曾慶良</p>
+  <p class="au-desc">新興科技推廣中心主任｜教育部學科中心研究教師｜臺北市資訊教育輔導員</p>
+  <div class="license"><p class="lic-t">© 阿亮老師（曾慶良）版權所有</p>
+    <p class="fs">本課程教材僅供 15W383 課程學員學習使用。「晨曦科技」「星河國中」與所有人名、報帳資料皆為虛構。</p>
+    <p class="warn">禁止修改內容 · 禁止轉傳散布 · 禁止商業使用</p></div>
+</div></footer>
+<script>
+(()=>{const st=document.getElementById('stage3d');if(!st)return;const ring=st.querySelector('.ring'),fs=[...ring.children],n=fs.length,step=360/n;
+let ang=0,vel=0,tilt=0,drag=null,moved=0,hover=false,W=0,R=0;const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function size(){W=Math.min(st.clientWidth*.62,460);R=Math.round(W/2/Math.tan(Math.PI/n)*1.04);fs.forEach(f=>{f.style.width=W+'px';f.style.marginLeft=(-W/2)+'px';f.style.marginTop=(-W*0.32)+'px'})}
+function draw(){ring.style.transform=`translateZ(${-R}px) rotateX(${-6+tilt}deg) rotateY(${ang}deg)`;
+ fs.forEach((f,i)=>{const a=i*step;f.style.transform=`rotateY(${a}deg) translateZ(${R}px)`;let rel=((a+ang)%360+540)%360-180;const c=Math.cos(rel*Math.PI/180);
+  f.style.opacity=(0.25+0.75*Math.max(0,c)).toFixed(2);f.style.filter=c>0.92?'none':'saturate(.7) brightness(.92)';f.style.pointerEvents=c>0.92?'auto':'none';f.tabIndex=c>0.92?0:-1})}
+function loop(){if(!drag){if(!still&&!hover)ang-=0.06;ang+=vel;vel*=0.94;if(Math.abs(vel)<0.01&&!hover&&!still){}}draw();requestAnimationFrame(loop)}
+st.addEventListener('pointerdown',e=>{if(e.target.closest('.nav'))return;drag={x:e.clientX,a:ang,t:performance.now()};moved=0;vel=0;st.classList.add('drag')});
+addEventListener('pointermove',e=>{const r=st.getBoundingClientRect();if(e.clientY>r.top&&e.clientY<r.bottom)tilt=((e.clientY-r.top)/r.height-.5)*-8;
+ if(!drag)return;const dx=e.clientX-drag.x;moved=Math.max(moved,Math.abs(dx));const na=drag.a+dx*0.35;vel=(na-ang)*0.5;ang=na});
+addEventListener('pointerup',()=>{if(drag){drag=null;st.classList.remove('drag')}});
+st.addEventListener('click',e=>{if(moved>6){e.preventDefault();moved=0}},true);
+st.addEventListener('mouseenter',()=>hover=true);st.addEventListener('mouseleave',()=>{hover=false;tilt=0});
+const snap=d=>{ang=Math.round(ang/step)*step+d*step;vel=0};
+st.querySelector('.nav.l').onclick=()=>snap(1);st.querySelector('.nav.r').onclick=()=>snap(-1);
+addEventListener('resize',size);size();draw();requestAnimationFrame(loop)})();
+(()=>{const v=document.getElementById('u8v'),nav=document.querySelector('.chap');if(!v||!nav)return;const bs=[...nav.querySelectorAll('button')];
+bs.forEach(b=>b.onclick=()=>{v.currentTime=+b.dataset.t;v.play()});
+v.addEventListener('timeupdate',()=>{let k=-1;bs.forEach((b,i)=>{if(v.currentTime>=+b.dataset.t-0.2)k=i});bs.forEach((b,i)=>b.classList.toggle('on',i===k))});
+const fit=()=>{nav.style.maxHeight=innerWidth>1100?v.parentElement.offsetHeight+'px':'none';nav.style.overflowY='auto'};addEventListener('resize',fit);v.addEventListener('loadedmetadata',fit);fit()})();
+document.addEventListener('click',e=>{document.querySelectorAll('details.dl[open]').forEach(d=>{if(!d.contains(e.target))d.removeAttribute('open')})});</script>
+</body>
+</html>
+

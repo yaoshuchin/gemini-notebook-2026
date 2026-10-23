@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=fb1aa415-238d-4982-b223-5c0e333e2b73
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>電子書閱讀器 · GeminiNoteBook 從資料建立規格到生成工具</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/reader.css">
+</head>
+<body>
+
+<div class="top">
+  <a class='back' href='index.html'>← 回課程首頁</a>
+  <h1 id="title">載入中…</h1>
+  <span class="dl" id="dl" title="本電子書僅供線上閱讀">🔒 僅供線上閱讀</span>
+</div>
+
+<div class="stage" id="stage">
+  <div class="book" id="book">
+    <canvas id="page"></canvas>
+    <canvas id="page2"></canvas>
+    <canvas id="prev-layer"></canvas>
+    <canvas id="ink"></canvas>
+    <canvas id="lens" hidden></canvas>
+    <div class="loading" id="loading">電子書載入中…</div>
+  </div>
+</div>
+
+<div class="bar">
+  <button class="btn" id="tocbtn" title="章節目錄">☰ <span class="lbl">目錄</span></button>
+
+  <span class="div"></span>
+
+  <button class="btn" id="prev" disabled>◀ <span class="lbl">上一頁</span></button>
+  <div class="pgbox">
+    <input id="num" type="number" min="1" value="1" aria-label="頁碼">
+    <span class="tot">/ <span id="tot">–</span></span>
+  </div>
+  <button class="btn" id="next" disabled><span class="lbl">下一頁</span> ▶</button>
+
+  <span class="div"></span>
+
+  <button class="btn" id="zout" title="縮小（-）">🔍<span style="font-size:12px">－</span></button>
+  <span class="zoomval" id="zv" title="點一下回到 100%">100%</span>
+  <button class="btn" id="zin" title="放大（+）">🔍<span style="font-size:12px">＋</span></button>
+  <button class="btn" id="fitbtn" title="整頁顯示：一整頁完整放進畫面，不用往下捲">⛶ <span class="lbl">整頁</span></button>
+  <button class="btn" id="spreadbtn" title="切換單頁／雙頁跨頁顯示">📖 <span class="lbl">雙頁</span></button>
+  <button class="btn" id="lensbtn" title="區域放大鏡：移到哪裡放大哪裡（滾輪調鏡片大小，Shift+滾輪調倍率）">🔎 <span class="lbl">放大鏡</span></button>
+  <span class="lenschip" id="lenschip" hidden title="滾輪調鏡片大小，Shift+滾輪調倍率">
+    <span id="lens-size">220</span>px · <span id="lens-pow">2.0</span>×
+  </span>
+
+  <span class="div"></span>
+
+  <button class="btn" id="draw"  title="自由畫線">✏️ <span class="lbl">畫畫</span></button>
+  <button class="btn" id="arrow" title="拖曳拉出箭頭">↗️ <span class="lbl">箭頭</span></button>
+  <button class="btn" id="rect"  title="拖曳拉出方框">▭ <span class="lbl">方框</span></button>
+  <button class="btn" id="oval"  title="拖曳拉出圓圈">◯ <span class="lbl">圓圈</span></button>
+  <button class="btn" id="text"  title="在書頁上加文字">🔤 <span class="lbl">打字</span></button>
+  <span class="penchip" id="penchip" title="滑鼠滾輪可調整粗細，點這裡回到預設">
+    <i id="pen-dot"></i><span id="pen-num">2.6</span>
+  </span>
+
+  <button class="btn" id="undo" title="復原上一步（Ctrl+Z）" disabled>↩ <span class="lbl">復原</span></button>
+  <button class="btn warn" id="clr" title="清除本頁筆跡與註記">🗑️ <span class="lbl">清除</span></button>
+
+  <span class="div"></span>
+
+  <button class="btn code" id="codebtn" title="取得這個單元的指令包">📋 <span class="lbl">指令</span></button>
+</div>
+
+<!-- 程式碼面板 -->
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="sheet-t">
+    <div class="sheet-top">
+      <div>
+        <h2 id="sheet-t">這個單元的指令</h2>
+        <p class="sheet-sub">整段複製，貼進 Spark 的「說明要執行的任務」就能用。</p>
+      </div>
+      <button class="x" id="sheet-x" aria-label="關閉">✕</button>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <pre class="codebox"><code id="codetext">載入中…</code></pre>
+    <div class="sheet-act">
+      <button class="btn big" id="copybtn">📋 複製全部指令</button>
+      <button class="btn big" id="dlbtn">⬇ 下載檔案</button>
+    </div>
+  </div>
+</div>
+
+<!-- 章節目錄 -->
+<div class="toc-wrap" id="tocwrap" hidden>
+  <nav class="toc-panel" role="dialog" aria-label="章節目錄">
+    <div class="toc-head">
+      <h2>章節目錄</h2>
+      <button class="x" id="toc-x" aria-label="關閉">✕</button>
+    </div>
+    <ul class="toc-list" id="toclist"></ul>
+  </nav>
+</div>
+
+<div class="hint" id="hint"></div>
+
+<script type="module" src="assets/reader.js"></script>
+<div class="netlify-badge" hidden></div>
+<script>
+/* Netlify 免費方案會在頁面載入後注入一個 z-index 極高的徽章 iframe，
+   位置壓在右下角工具列上，會擋住按鈕。CSS 已隱藏，這裡再補一道
+   （它是後來才插入的，所以用 observer 持續盯著）。 */
+(function(){
+  var kill = function(){
+    document.querySelectorAll(
+      '#nl-badge-frame, iframe[title="Powered by Netlify"], [id^="netlify-badge"]'
+    ).forEach(function(el){ el.remove(); });
+  };
+  kill();
+  new MutationObserver(kill).observe(document.documentElement, {childList:true, subtree:true});
+  window.addEventListener('load', kill);
+})();
+</script>
+</body>
+</html>
+

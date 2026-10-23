@@ -1,0 +1,25 @@
+【把生成器上傳到 Netlify】（單一 index.html 的生成器，不需要 build）
+
+第一次（只做一次）
+  npm install -g netlify-cli        安裝 Netlify 工具（要先裝 Node.js，見 U00）
+  netlify login                     跳出瀏覽器 → 按 Authorize 授權
+
+上傳（在生成器資料夾裡打）
+  netlify deploy --prod --dir . --site-name 你的專案名稱
+  例：netlify deploy --prod --dir . --site-name classroom-scene-generator-aliang
+  → 網址就是 https://你的專案名稱.netlify.app
+  → 名稱被別人用過會失敗，加上自己的英文名字或數字再試一次
+  → 有多個團隊時，加 --team 你的團隊代號（netlify api listAccountsForUser 可查）
+
+改完再上傳（網址不變）
+  netlify deploy --prod --dir .
+  （第一次上傳後，資料夾裡會有 .netlify 資料夾記住是哪個網站，不要刪）
+
+也可以直接交給 AI
+  在提示詞最後加一句：「完成後部署到 Netlify，專案名稱 ＿＿＿，最後告訴我網址」
+  AI 會自己執行上面的指令；你只要在 netlify login 跳出的網頁按授權。
+
+注意
+  - 公開網址任何人都看得到，不要放個資
+  - --dir . 會把整個資料夾傳上去，資料夾裡只放網頁需要的檔案
+  - 上線後用手機打開一次確認

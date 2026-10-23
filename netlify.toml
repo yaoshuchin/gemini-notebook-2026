@@ -1,0 +1,12 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/reader"
+  to = "/reader.html"
+  status = 200
+
+[[redirects]]
+  from = "/aishort"
+  to = "/aishort.html"
+  status = 200

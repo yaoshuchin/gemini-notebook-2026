@@ -1,0 +1,151 @@
+{
+ "U00": [
+  {
+   "label": "課前安裝指令",
+   "file": "code/U00/課前安裝指令.txt",
+   "lines": 10
+  }
+ ],
+ "U01": [
+  {
+   "label": "網址與搜尋關鍵字",
+   "file": "code/U01/網址與搜尋關鍵字.txt",
+   "lines": 4
+  }
+ ],
+ "U02": [
+  {
+   "label": "提示詞_U02",
+   "file": "code/U02/提示詞_U02.txt",
+   "lines": 9
+  }
+ ],
+ "U03": [
+  {
+   "label": "提示詞_U03_工作室",
+   "file": "code/U03/提示詞_U03_工作室.txt",
+   "lines": 8
+  }
+ ],
+ "U04": [
+  {
+   "label": "提示詞_交叉審查規格",
+   "file": "code/U04/提示詞_交叉審查規格.txt",
+   "lines": 13
+  },
+  {
+   "label": "提示詞_規格書",
+   "file": "code/U04/提示詞_規格書.txt",
+   "lines": 15
+  }
+ ],
+ "U05": [
+  {
+   "label": "提示詞_交叉審查程式",
+   "file": "code/U05/提示詞_交叉審查程式.txt",
+   "lines": 11
+  },
+  {
+   "label": "提示詞_依審查修正",
+   "file": "code/U05/提示詞_依審查修正.txt",
+   "lines": 11
+  },
+  {
+   "label": "提示詞_做網頁",
+   "file": "code/U05/提示詞_做網頁.txt",
+   "lines": 14
+  }
+ ],
+ "U06": [
+  {
+   "label": "審查清單",
+   "file": "code/U06/審查清單.md",
+   "lines": 16
+  }
+ ],
+ "U07": [
+  {
+   "label": "提示詞_做遊戲_精簡",
+   "file": "code/U07/提示詞_做遊戲_精簡.txt",
+   "lines": 10
+  },
+  {
+   "label": "提示詞_偵探模式_精簡",
+   "file": "code/U07/提示詞_偵探模式_精簡.txt",
+   "lines": 10
+  },
+  {
+   "label": "提示詞_出題_精簡",
+   "file": "code/U07/提示詞_出題_精簡.txt",
+   "lines": 8
+  },
+  {
+   "label": "提示詞_角色扮演_精簡",
+   "file": "code/U07/提示詞_角色扮演_精簡.txt",
+   "lines": 11
+  }
+ ],
+ "U08": [
+  {
+   "label": "修正_temperature一行",
+   "file": "code/U08/修正_temperature一行.txt",
+   "lines": 7
+  },
+  {
+   "label": "測試問題",
+   "file": "code/U08/測試問題.txt",
+   "lines": 6
+  }
+ ],
+ "U09": [
+  {
+   "label": "Netlify部署指令",
+   "file": "code/U09/Netlify部署指令.txt",
+   "lines": 26
+  },
+  {
+   "label": "提示詞_四類範本",
+   "file": "code/U09/提示詞_四類範本.txt",
+   "lines": 42
+  },
+  {
+   "label": "提示詞_改版追加",
+   "file": "code/U09/提示詞_改版追加.txt",
+   "lines": 17
+  },
+  {
+   "label": "提示詞_示範_教室場景生成器",
+   "file": "code/U09/提示詞_示範_教室場景生成器.txt",
+   "lines": 9
+  },
+  {
+   "label": "提示詞_萬用骨架",
+   "file": "code/U09/提示詞_萬用骨架.txt",
+   "lines": 18
+  }
+ ],
+ "U10": [
+  {
+   "label": "REA安裝與註冊指令",
+   "file": "code/U10/REA安裝與註冊指令.txt",
+   "lines": 27
+  },
+  {
+   "label": "提示詞_REA拆解Excalidraw手繪線條",
+   "file": "code/U10/提示詞_REA拆解Excalidraw手繪線條.txt",
+   "lines": 21
+  }
+ ],
+ "UAI": [
+  {
+   "label": "AI名詞速查表",
+   "file": "code/UAI/AI名詞速查表.md",
+   "lines": 26
+  },
+  {
+   "label": "提示詞_請AI解釋名詞",
+   "file": "code/UAI/提示詞_請AI解釋名詞.txt",
+   "lines": 9
+  }
+ ]
+}

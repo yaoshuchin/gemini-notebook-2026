@@ -1,0 +1,353 @@
+/* 電子書閱讀器 — 卡片式繪畫筆觸風格 */
+:root{
+  --bg:#faf7f1;--card:#ffffff;--line:#e8e2d6;--ink:#2b2620;
+  --muted:#7a6f60;--soft:#a89a86;--red:#c0392b;--red-dark:#a53125;
+  --gold:#b8860b;--cream:#f5efe3;
+  --serif:'Noto Serif TC','Songti TC',serif;
+  --sans:'Noto Sans TC',system-ui,'Microsoft JhengHei',sans-serif;
+  --bar:70px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  display:flex;flex-direction:column;overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── 頂列 ───────────────────────────── */
+.top{
+  background:var(--cream);border-bottom:1px solid var(--line);
+  padding:9px 18px;display:flex;align-items:center;gap:14px;flex-shrink:0;
+}
+.top .back{
+  color:var(--red);font-weight:700;font-size:14.5px;
+  text-decoration:none;white-space:nowrap;
+}
+.top .back:hover{text-decoration:underline}
+.top h1{
+  font-family:var(--serif);font-size:17px;font-weight:800;margin:0;
+  flex:1;text-align:center;letter-spacing:.4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.top .dl{
+  color:var(--muted);font-size:13.5px;text-decoration:none;
+  border:1px solid var(--line);background:var(--card);
+  padding:5px 13px;border-radius:999px;white-space:nowrap;transition:.15s;
+}
+.top .dl:hover{border-color:var(--red);color:var(--red)}
+
+/* ── 書頁區 ─────────────────────────── */
+.stage{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  display:flex;justify-content:center;
+  align-items:flex-start;padding:10px 8px 20px;
+}
+.book{
+  position:relative;background:var(--card);border-radius:6px;
+  box-shadow:0 10px 40px rgba(43,38,32,.16);
+  border:1px solid var(--line);line-height:0;flex-shrink:0;
+}
+#page,#ink,#prev-layer{display:block;border-radius:5px}
+#ink,#prev-layer{position:absolute;inset:0;touch-action:none}
+#prev-layer{pointer-events:none}          /* 預覽層不吃事件，交給 #ink */
+body.tool-draw #ink{cursor:crosshair}
+body.tool-text #ink{cursor:text}
+
+/* 頁面上的文字註記 */
+.note{
+  position:absolute;font-family:var(--sans);color:var(--red);
+  font-size:16px;font-weight:600;line-height:1.4;
+  background:rgba(255,255,255,.86);border:1px dashed var(--red);
+  border-radius:6px;padding:3px 7px;min-width:2em;outline:none;
+  white-space:pre-wrap;max-width:60%;
+}
+
+.loading{
+  position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;color:var(--muted);font-size:15px;
+  background:var(--card);border-radius:6px;line-height:1.7;z-index:5;
+}
+
+/* ── 底部工具列 ─────────────────────── */
+.bar{
+  background:var(--card);border-top:1px solid var(--line);
+  padding:10px 14px;display:flex;align-items:center;
+  justify-content:center;gap:7px;flex-wrap:wrap;flex-shrink:0;
+  box-shadow:0 -3px 14px rgba(43,38,32,.06);min-height:var(--bar);
+}
+/* 按鈕多，中等螢幕收緊一點才不會擠成兩排 */
+@media (max-width:1500px){
+  .bar{gap:5px;padding:9px 8px}
+  .btn{padding:8px 12px}
+  .div{margin:0 2px}
+}
+/* 筆電與投影機（1366、1280）工具列會擠成兩排、吃掉高度：
+   註記工具與放大鏡只留圖示（滑鼠移上去有說明），確保一排放得下 */
+@media (max-width:1440px) and (min-width:701px){
+  #draw .lbl,#arrow .lbl,#rect .lbl,#oval .lbl,#text .lbl,#undo .lbl,#clr .lbl,#lensbtn .lbl{display:none}
+  .btn{padding:7px 10px}
+}
+/* 被 JS 藏起來的按鈕（橫式書不需要滿版寬、雙頁） */
+.btn[hidden]{display:none!important}
+.btn{
+  background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:8px 16px;font-family:var(--sans);font-size:14px;font-weight:600;
+  color:var(--ink);cursor:pointer;transition:.15s;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:6px;line-height:1.4;
+}
+.btn:hover:not(:disabled){
+  border-color:var(--red);color:var(--red);transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(43,38,32,.1);
+}
+.btn:disabled{opacity:.36;cursor:not-allowed}
+.btn.on{
+  background:var(--red);border-color:var(--red);color:#fff;
+  box-shadow:0 4px 14px rgba(192,57,43,.3);
+}
+.btn.on:hover{color:#fff;background:var(--red-dark)}
+.btn.warn{border-color:var(--gold);background:#fffdf6}
+.btn.warn:hover{border-color:var(--red)}
+
+.pgbox{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--serif);font-size:15px;font-weight:700;
+  padding:0 8px;color:var(--ink);white-space:nowrap;
+}
+.pgbox input{
+  width:52px;text-align:center;font-family:var(--serif);font-size:15px;
+  font-weight:700;color:var(--red);border:1px solid var(--line);
+  border-radius:8px;padding:5px 4px;background:var(--bg);outline:none;
+}
+.pgbox input:focus{border-color:var(--red)}
+.pgbox .tot{color:var(--muted);font-weight:600}
+.div{width:1px;height:26px;background:var(--line);margin:0 5px}
+.zoomval{
+  font-size:13px;color:var(--muted);font-weight:600;
+  min-width:46px;text-align:center;
+}
+
+.hint{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(var(--bar) + 18px);
+  background:rgba(43,38,32,.9);color:#fff;font-size:13.5px;
+  padding:9px 18px;border-radius:999px;pointer-events:none;
+  opacity:0;transition:opacity .25s;z-index:50;
+}
+.hint.show{opacity:1}
+
+@media (max-width:700px){
+  .top h1{font-size:14.5px}
+  .top .dl{display:none}
+  .stage{padding:8px 6px 14px}
+  /* 手機：工具列不換行，改成單排橫向捲動，才不會吃掉閱讀高度 */
+  .bar{
+    gap:6px;padding:8px 10px;flex-wrap:nowrap;
+    overflow-x:auto;justify-content:flex-start;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .bar::-webkit-scrollbar{display:none}
+  .btn{padding:7px 11px;font-size:16px;flex-shrink:0}
+  .btn .lbl{display:none}
+  .pgbox{font-size:14px;flex-shrink:0}
+  .div,.penchip,.zoomval{flex-shrink:0}
+}
+
+/* ── 程式碼面板 ─────────────────────── */
+.btn.code{border-color:var(--gold);background:#fffdf6}
+.btn.code:hover{border-color:var(--red)}
+
+.sheet{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(43,38,32,.55);
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:fade .18s ease;
+}
+/* display:flex 會蓋掉 hidden，必須明確關掉，
+   否則面板收起時仍是一層看不見的遮罩，把工具列全部擋住。 */
+.sheet[hidden]{display:none}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet-box{
+  background:var(--card);width:min(980px,100%);
+  max-height:86vh;border-radius:18px 18px 0 0;
+  display:flex;flex-direction:column;
+  box-shadow:0 -10px 40px rgba(43,38,32,.3);
+  animation:up .24s cubic-bezier(.22,1,.36,1);
+}
+@keyframes up{from{transform:translateY(26px)}to{transform:translateY(0)}}
+
+.sheet-top{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:14px;padding:20px 24px 14px;border-bottom:1px solid var(--line);
+}
+.sheet-top h2{
+  font-family:var(--serif);font-size:20px;font-weight:800;margin:0 0 3px;
+}
+.sheet-sub{color:var(--muted);font-size:13.5px;margin:0}
+.x{
+  background:none;border:none;font-size:20px;color:var(--muted);
+  cursor:pointer;padding:4px 8px;border-radius:8px;line-height:1;
+}
+.x:hover{background:var(--cream);color:var(--red)}
+
+.tabs{
+  display:flex;gap:8px;padding:12px 24px 0;flex-wrap:wrap;
+}
+.tab{
+  background:var(--bg);border:1px solid var(--line);border-radius:999px;
+  padding:6px 16px;font-family:var(--sans);font-size:13.5px;font-weight:600;
+  color:var(--muted);cursor:pointer;transition:.15s;
+}
+.tab:hover{border-color:var(--red);color:var(--red)}
+.tab.on{background:var(--red);border-color:var(--red);color:#fff}
+
+.codebox{
+  flex:1;overflow:auto;margin:14px 24px 0;padding:16px 18px;
+  background:#2b2620;border-radius:12px;
+  font-family:'Consolas','Monaco','Courier New',monospace;
+  font-size:12.8px;line-height:1.7;color:#f0ebe4;
+  white-space:pre;tab-size:2;
+  user-select:text;                 /* 程式碼刻意允許選取複製 */
+}
+.codebox code{font:inherit;color:inherit}
+
+.sheet-act{
+  display:flex;gap:11px;justify-content:center;flex-wrap:wrap;
+  padding:16px 24px 22px;
+}
+.btn.big{padding:11px 26px;font-size:15px}
+#copybtn{background:var(--red);border-color:var(--red);color:#fff}
+#copybtn:hover{background:var(--red-dark);color:#fff}
+
+@media (max-width:700px){
+  .sheet-box{max-height:92vh;border-radius:14px 14px 0 0}
+  .sheet-top{padding:16px 16px 12px}
+  .tabs{padding:10px 16px 0}
+  .codebox{margin:12px 16px 0;font-size:11.6px;padding:13px 14px}
+  .sheet-act{padding:13px 16px 18px}
+  .btn.big{padding:10px 18px;font-size:14px;flex:1}
+}
+
+/* Netlify 免費方案會注入一個 z-index 極高的徽章 iframe，
+   位置正好壓在右下角工具列上，把「程式碼」按鈕擋住。
+   這裡直接隱藏它，避免影響操作。 */
+#nl-badge-frame,
+iframe[title="Powered by Netlify"],
+[id^="netlify-badge"]{
+  display:none !important;
+  pointer-events:none !important;
+}
+
+/* 筆畫粗細指示（滾輪調整時即時反映） */
+.penchip{
+  display:none;align-items:center;gap:7px;
+  padding:5px 13px 5px 10px;border-radius:999px;
+  border:1px solid var(--gold);background:#fffdf6;
+  font-size:13px;font-weight:700;color:var(--muted);
+  cursor:pointer;user-select:none;white-space:nowrap;
+}
+body.has-tool .penchip{display:inline-flex}   /* 只在選了畫圖工具時出現 */
+.penchip:hover{border-color:var(--red);color:var(--red)}
+.penchip i{
+  display:inline-block;width:2.6px;height:2.6px;
+  background:var(--red);border-radius:50%;
+  transition:width .12s,height .12s;
+}
+
+/* ── 章節目錄側欄 ───────────────────── */
+.toc-wrap{
+  position:fixed;inset:0;z-index:90;
+  background:rgba(43,38,32,.5);
+  display:flex;justify-content:flex-start;
+  animation:fade .16s ease;
+}
+.toc-wrap[hidden]{display:none}
+.toc-panel{
+  background:var(--card);width:min(360px,86vw);height:100%;
+  display:flex;flex-direction:column;
+  box-shadow:6px 0 30px rgba(43,38,32,.28);
+  animation:slidein .22s cubic-bezier(.22,1,.36,1);
+}
+@keyframes slidein{from{transform:translateX(-24px)}to{transform:translateX(0)}}
+.toc-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px 14px;border-bottom:1px solid var(--line);
+  background:var(--cream);
+}
+.toc-head h2{font-family:var(--serif);font-size:18px;font-weight:800;margin:0}
+.toc-list{list-style:none;margin:0;padding:8px 0;overflow-y:auto;flex:1}
+.toc-list li{margin:0}
+.toc-list button{
+  width:100%;display:flex;align-items:baseline;gap:12px;
+  background:none;border:none;border-bottom:1px solid var(--line);
+  padding:13px 20px;text-align:left;cursor:pointer;
+  font-family:var(--sans);font-size:14.5px;color:var(--ink);transition:background .14s;
+}
+.toc-list button:hover{background:#fdf1ef}
+.toc-list button.on{background:#fdf1ef;font-weight:700}
+.toc-list button.on .tp{color:var(--red)}
+.toc-list .tt{flex:1;line-height:1.5}
+.toc-list .tp{
+  font-family:var(--serif);font-size:13px;font-weight:700;
+  color:var(--soft);white-space:nowrap;
+}
+
+/* ── 區域放大鏡 ─────────────────────────
+   跟著滑鼠走的圓形鏡片，只放大鏡片底下那一塊。
+   與工具列的整頁縮放並存：整頁縮放改變版面，放大鏡不改版面。 */
+#lens{
+  position:absolute; inset:auto; pointer-events:none; z-index:40;
+  border-radius:50%; border:3px solid rgba(226,85,31,.9);
+  box-shadow:0 6px 26px rgba(0,0,0,.30), inset 0 0 0 1px rgba(255,255,255,.65);
+  background:#fff; display:block;
+}
+#lens[hidden]{display:none}
+.book.lensing{cursor:none}
+.lenschip{
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:12px; color:var(--ink-soft,#6b6257);
+  background:#f4efe7; border:1px solid #e2d8c8; border-radius:999px;
+  padding:4px 10px; white-space:nowrap; user-select:none;
+}
+.lenschip[hidden]{display:none}
+
+/* ── 雙頁跨頁模式 ───────────────────────
+   兩張畫布並排，中間一道書溝陰影，翻頁時整本輕微翻動。 */
+.book.spread{display:flex; align-items:flex-start; gap:0}
+.book.spread #page2{
+  display:block;
+  box-shadow:0 10px 30px rgba(43,38,32,.16);
+}
+#page2{display:none}
+.book.spread::after{
+  content:''; position:absolute; top:0; bottom:0; left:50%;
+  width:26px; transform:translateX(-13px); pointer-events:none; z-index:5;
+  background:linear-gradient(to right,
+    rgba(0,0,0,0) 0%, rgba(0,0,0,.05) 32%, rgba(0,0,0,.16) 50%,
+    rgba(0,0,0,.05) 68%, rgba(0,0,0,0) 100%);
+}
+/* 翻頁動畫：整本以書脊為軸輕輕翻一下 */
+@keyframes flipNext{
+  0%{transform:perspective(1800px) rotateY(0deg)}
+  45%{transform:perspective(1800px) rotateY(-7deg)}
+  100%{transform:perspective(1800px) rotateY(0deg)}
+}
+@keyframes flipPrev{
+  0%{transform:perspective(1800px) rotateY(0deg)}
+  45%{transform:perspective(1800px) rotateY(7deg)}
+  100%{transform:perspective(1800px) rotateY(0deg)}
+}
+.book.flip-next{animation:flipNext .42s ease-out}
+.book.flip-prev{animation:flipPrev .42s ease-out}
+@media (prefers-reduced-motion: reduce){
+  .book.flip-next,.book.flip-prev{animation:none}
+}
+
+/* 整頁模式：頁面在閱讀區裡置中，且不出現捲軸 */
+.stage.fit{align-items:center; overflow:hidden}
+
+/* 指令框旁的複製按鈕（2026-10-03） */
+.cp-btn{position:absolute;z-index:6;white-space:nowrap;transform:translateX(-100%);font:600 13px/1 system-ui,"Microsoft JhengHei",sans-serif;
+  padding:6px 10px;border-radius:999px;border:1px solid #e2551f;background:#fff;color:#e2551f;cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.cp-btn:hover{background:#e2551f;color:#fff}
