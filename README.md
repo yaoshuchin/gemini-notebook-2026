@@ -1,14 +1,22 @@
 # 從資料到工具 三段式開發實戰 · Gemini Notebook × AI 規格化 × Vibe Coding
 
-> 本專案為 **Gemini NoteBook 從資料建立規格到生成工具** 課程教材網頁之完整本機鏡像複製品。
+> 本專案為 **Gemini NoteBook 從資料建立規格到生成工具**（15W383）課程教材網頁之完整本機鏡像與開源版本。
 > 原始來源：[https://15w383-data-to-tool-aliang.netlify.app/](https://15w383-data-to-tool-aliang.netlify.app/)
-> **本版本已解除密碼限制，可直接免密碼瀏覽所有教材、線上電子書閱讀器、素材包與提示詞庫！**
+> **本版本已完全解除密碼限制，免密碼即可直通所有教學單元、電子書閱讀器、素材包與提示詞庫！**
+
+---
+
+## 🌐 線上展示網址
+
+- **GitHub Pages 直達連結**：[https://yaoshuchin.github.io/gemini-notebook-2026/](https://yaoshuchin.github.io/gemini-notebook-2026/)
+- **GitHub 專案倉庫**：[https://github.com/yaoshuchin/gemini-notebook-2026](https://github.com/yaoshuchin/gemini-notebook-2026)
+- **Netlify 部署支援**：專案已內建 `netlify.toml` 與 `_redirects`，可直接於 Netlify 連結本 GitHub 儲存庫自動部署上線！
 
 ---
 
 ## 📖 課程內容與收錄架構
 
-- **核心主題**：Gemini Notebook（原 NotebookLM）知識庫 × AI 規格化與交叉審查 × Vibe Coding 實戰
+- **核心技術**：Gemini Notebook（原 NotebookLM）知識庫 × AI 規格化與交叉審查 × Vibe Coding 實戰
 - **收錄單元**：
   - **UAI**：AI 名詞大集合（Vibe Coding、Spec、Loop、MCP、Skill）
   - **U00**：開課導讀：三段式地圖與學員問答
